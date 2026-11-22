@@ -177,7 +177,9 @@
     // Entete
     headerEl.style.display = (showHeader === false) ? "none" : "flex";
     headerEl.style.color = "rgb(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ")";
-    nameEl.textContent = currentName || (sensorId || "--");
+    // Nom affiche : nom personnalisé si renseigné, sinon nom du capteur
+    var cname = String(customName || "").trim();
+    nameEl.textContent = cname || currentName || (sensorId || "--");
     var lastPoint = history.length ? history[history.length - 1] : null;
     valueEl.textContent = lastPoint ? (parseFloat(lastPoint.v).toFixed(1)) : "--";
     unitsEl.textContent = lastPoint ? " " + currentUnits : "";
