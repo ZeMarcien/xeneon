@@ -9,6 +9,7 @@
 
   <!-- === Reglages === -->
   <meta name="x-icue-property" content="sensorId" data-label="'Capteur'" data-type="sensors-combobox" data-default="plugins.Sensorsdataprovider.getDefaultSensorIdBlock('temperature')" />
+  <meta name="x-icue-property" content="customName" data-label="'Nom affiché (facultatif)'" data-type="textfield" data-default="''" />
   <meta name="x-icue-property" content="historyMinutes" data-label="'Historique (minutes)'" data-type="combobox" data-values="['1', '2', '3', '4', '5']" data-default="'2'" />
   <meta name="x-icue-property" content="curveColor" data-label="'Couleur de la courbe'" data-type="color" data-default="'#00e0ff'" />
 
@@ -27,7 +28,7 @@
 
   <script id="x-icue-groups" type="application/json">
     [
-      { "title": "'Monitoring'", "properties": ["sensorId", "historyMinutes", "curveColor"] },
+      { "title": "'Monitoring'", "properties": ["sensorId", "customName", "historyMinutes", "curveColor"] },
       { "title": "'Echelle'", "properties": ["valueMode", "normMin", "normMax"] },
       { "title": "'Affichage'", "properties": ["showHeader", "textColor"] },
       { "title": "'Personnalisation'", "properties": ["backgroundColor", "transparency"] }
