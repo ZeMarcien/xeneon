@@ -28,6 +28,9 @@ html, body {
   justify-content: space-between;
   gap: calc(10vh * 0.2);
   min-height: 0;
+  /* nom et valeur décalés de 20 px vers l'intérieur */
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Tous les caracteres de la ligne du haut a la meme taille */
@@ -44,14 +47,10 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* décalé de 20 px vers la gauche (demande) */
-  transform: translateX(-20px);
 }
 
 .current-value {
   white-space: nowrap;
-  /* décalé de 20 px vers la droite (demande) */
-  transform: translateX(20px);
 }
 
 .current-value .units {
