@@ -104,15 +104,14 @@
   // ---------------- Conversion en % ----------------
 
   function valueToPercent(v) {
-    var pct;
+    // Ramene la valeur brute a l echelle 0..100 (brute ou normalisee).
+    // Le clamp aux bornes de l axe se fait au trace (py_), pas ici.
     if (valueMode === "norm") {
       var lo = parseFloat(normMin), hi = parseFloat(normMax);
       if (isNaN(lo) || isNaN(hi) || hi <= lo) return 0;
-      pct = ((v - lo) / (hi - lo)) * 100;
-    } else {
-      pct = v; // la valeur du capteur est deja un pourcentage
+      return Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
     }
-    return Math.max(0, Math.min(100, pct));
+    return v; // la valeur du capteur est deja un pourcentage
   }
 
   // ---------------- Persistance (localStorage, cle = uniqueId) ----------------
@@ -184,49 +183,63 @@
     valueEl.textContent = lastPoint ? (parseFloat(lastPoint.v).toFixed(1)) : "--";
     unitsEl.textContent = lastPoint ? " " + currentUnits : "";
 
-    // Zone de tracé
-    var padL = Math.round(W * 0.055), padR = Math.round(W * 0.015);
-    var padT = Math.round(H * 0.25), padB = Math.round(H * 0.25);
+    // Zone de tracé : le graphique commence 12 px sous le nom/valeur du capteur
+    var srgb = colorToRgb(scaleColor);
+    var axisFont = Math.max(14, Math.round(H * 0.075)); // police des echelles agrandie
+    var minB = parseFloat(yMin), maxB = parseFloat(yMax);
+    if (isNaN(minB) || isNaN(maxB) || maxB <= minB) { minB = 0; maxB = 100; }
+    var unit = String(axisUnit == null ? "%" : axisUnit);
+    var headRect = headerEl.getBoundingClientRect();
+    var cRect = canvas.getBoundingClientRect();
+    var gapHeader = (showHeader === false) ? 12 : Math.max(0, Math.round(headRect.bottom - cRect.top)) + 12;
+    var padR = Math.round(W * 0.015);
+    var padT = gapHeader + Math.round(axisFont * 0.45);
+    var padB = Math.round(axisFont * 1.5);
+    var padL = Math.round(axisFont * 2.6);
     var px = padL, py = padT, pw = W - padL - padR, ph = H - padT - padB;
     if (pw <= 10 || ph <= 10) return;
 
-    ctx.font = Math.round(H * 0.055) + 'px "Segoe UI", sans-serif';
+    ctx.font = axisFont + 'px "Segoe UI", sans-serif';
     ctx.textBaseline = "middle";
 
-    // Grille horizontale : 0 / 25 / 50 / 75 / 100 %
+    // Grille horizontale : borne min -> borne max (reglables), 5 graduations
     var i, gy, lbl;
     for (i = 0; i <= 4; i++) {
       gy = py + ph - (ph * i) / 4;
-      ctx.strokeStyle = "rgba(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ",0.15)";
+      ctx.strokeStyle = "rgba(" + srgb[0] + "," + srgb[1] + "," + srgb[2] + ",0.35)";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(px, Math.round(gy) + 0.5);
       ctx.lineTo(px + pw, Math.round(gy) + 0.5);
       ctx.stroke();
-      lbl = String(i * 25);
-      ctx.fillStyle = "rgba(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ",0.45)";
+      lbl = parseFloat((minB + ((maxB - minB) * i) / 4).toFixed(1));
+      ctx.fillStyle = "rgba(" + srgb[0] + "," + srgb[1] + "," + srgb[2] + ",0.8)";
       ctx.textAlign = "right";
-      ctx.fillText(lbl + "%", px - 4, gy);
+      ctx.fillText(lbl + (unit ? " " + unit : ""), px - 4, gy);
     }
 
-    // Grille verticale : une ligne par minute
+    // Grille verticale : une ligne par minute, "0" a droite (au lieu de "maintenant")
     var minutes = Math.max(1, parseInt(historyMinutes, 10) || 2);
     var now = Date.now();
     var windowMs = minutes * 60 * 1000;
     var x0 = px + pw; // t = now
+    var tu = (timeUnit === "s") ? "s" : "min";
     ctx.textAlign = "center";
     for (i = 0; i <= minutes; i++) {
       var gx = x0 - (pw * (i * 60 * 1000)) / windowMs;
       if (gx < px) break;
-      ctx.strokeStyle = "rgba(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ",0.08)";
+      ctx.strokeStyle = "rgba(" + srgb[0] + "," + srgb[1] + "," + srgb[2] + ",0.18)";
       ctx.beginPath();
       ctx.moveTo(Math.round(gx) + 0.5, py);
       ctx.lineTo(Math.round(gx) + 0.5, py + ph);
       ctx.stroke();
-      ctx.fillStyle = "rgba(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ",0.4)";
-      if (i > 0 || i < minutes) {
-        ctx.fillText(i === 0 ? "maintenant" : "-" + i + " min", gx, py + ph + H * 0.075);
-      }
+      ctx.fillStyle = "rgba(" + srgb[0] + "," + srgb[1] + "," + srgb[2] + ",0.8)";
+      var tlabel;
+      if (i === 0) tlabel = "0";
+      else if (tu === "s") tlabel = "-" + (i * 60);
+      else tlabel = "-" + i;
+      if (i === minutes) tlabel += " (" + tu + ")";
+      ctx.fillText(tlabel, gx, py + ph + axisFont * 0.75);
     }
 
     // Historique visible
@@ -242,7 +255,10 @@
       return px + pw - ((now - p.t) / windowMs) * pw;
     }
     function py_(p) {
-      return py + ph - (valueToPercent(p.v) / 100) * ph;
+      var pct = valueToPercent(p.v);          // valeur ramenee a l echelle 0..100
+      var t = (pct - minB) / (maxB - minB);   // borne min/max de l axe
+      t = Math.max(0, Math.min(1, t));
+      return py + ph - t * ph;
     }
 
     // Remplissage sous la courbe

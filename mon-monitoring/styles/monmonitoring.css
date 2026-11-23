@@ -63,7 +63,9 @@ html, body {
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  margin-top: calc(var(--layout-unit) * 1.5);
+  /* le decalage en dessous de l'en-tete (12 px) est calcule dans le JS
+     pour rester exact quelle que soit la taille du widget */
+  margin-top: 0;
 }
 
 #chart {
