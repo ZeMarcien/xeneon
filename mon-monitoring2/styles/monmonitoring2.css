@@ -19,10 +19,10 @@ html, body {
   height: 100vh;
 }
 
-/* Ligne du haut : hauteur fixe 10 % du widget */
+/* Ligne du haut : hauteur fixe 10 % du widget + 10 px (agrandie) */
 .header {
-  flex: 0 0 10%;
-  height: 10%;
+  flex: 0 0 calc(10% + 10px);
+  height: calc(10% + 10px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,10 +44,14 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* décalé de 20 px vers la gauche (demande) */
+  transform: translateX(-20px);
 }
 
 .current-value {
   white-space: nowrap;
+  /* décalé de 20 px vers la droite (demande) */
+  transform: translateX(20px);
 }
 
 .current-value .units {
