@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon Monitoring 2</title>
+  <link rel="icon" type="image/svg+xml" href="resources/icon.svg" />
+  <meta name="x-icue-widget-preview" content="resources/thumbnail.png" />
+
+  <!-- === Reglages === -->
+  <meta name="x-icue-property" content="sensorId" data-label="'Capteur'" data-type="sensors-combobox" data-default="plugins.Sensorsdataprovider.getDefaultSensorIdBlock('temperature')" />
+  <meta name="x-icue-property" content="customName" data-label="'Nom affiche (facultatif)'" data-type="textfield" data-default="''" />
+  <meta name="x-icue-property" content="historyMinutes" data-label="'Historique (minutes)'" data-type="combobox" data-values="['1', '2', '3', '4', '5']" data-default="'2'" />
+  <meta name="x-icue-property" content="curveColor" data-label="'Couleur de la courbe'" data-type="color" data-default="'#00e0ff'" />
+
+  <!-- === Bornes affichees de l axe (courbe fixee 0 -> 100) === -->
+  <meta name="x-icue-property" content="yMinLabel" data-label="'Borne min affichee'" data-type="textfield" data-default="'0'" />
+  <meta name="x-icue-property" content="yMaxLabel" data-label="'Borne max affichee'" data-type="textfield" data-default="'100'" />
+
+  <!-- === Couleurs === -->
+  <meta name="x-icue-property" content="scaleColor" data-label="'Couleur des echelles'" data-type="color" data-default="'#9aa4ad'" />
+  <meta name="x-icue-property" content="textColor" data-label="'Couleur du texte (nom + valeur)'" data-type="color" data-default="'#ffffff'" />
+
+  <!-- === Personnalisation (doit etre le dernier groupe) === -->
+  <meta name="x-icue-property" content="backgroundColor" data-label="'Arriere-plan'" data-type="color" data-default="'#0d1117'" />
+  <meta name="x-icue-property" content="transparency" data-label="'Opacite du fond'" data-type="slider" data-default="100" data-min="0" data-max="100" data-step="1" />
+
+  <script id="x-icue-groups" type="application/json">
+    [
+      { "title": "'Monitoring'", "properties": ["sensorId", "customName", "historyMinutes", "curveColor"] },
+      { "title": "'Bornes affichees'", "properties": ["yMinLabel", "yMaxLabel"] },
+      { "title": "'Couleurs'", "properties": ["scaleColor", "textColor"] },
+      { "title": "'Personnalisation'", "properties": ["backgroundColor", "transparency"] }
+    ]
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="styles/monmonitoring2.css" />
+</head>
+<body>
+  <div class="widget-root">
+    <!-- Ligne du haut : hauteur fixe = 10 % du widget, nom a gauche, valeur a droite -->
+    <div class="header" id="header">
+      <span class="sensor-name" id="sensorName">--</span>
+      <span class="current-value"><span id="currentValue">--</span><span class="units" id="currentUnits"></span></span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="chart"></canvas>
+      <div class="empty-state" id="emptyState">Recuperation des donnees du capteur...</div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="scripts/monmonitoring2.js"></script>
+</body>
+</html>
