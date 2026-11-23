@@ -13,14 +13,19 @@
   <meta name="x-icue-property" content="historyMinutes" data-label="'Historique (minutes)'" data-type="combobox" data-values="['1', '2', '3', '4', '5']" data-default="'2'" />
   <meta name="x-icue-property" content="curveColor" data-label="'Couleur de la courbe'" data-type="color" data-default="'#00e0ff'" />
 
-  <!-- === Echelle 0-100 % === -->
+  <!-- === Echelle et axes === -->
   <meta name="x-icue-property" content="valueMode" data-label="'Echelle'" data-type="combobox" data-values="[{'key':'raw','value':'Brute (valeur = %)'},{'key':'norm','value':'Normalisee (min-max en %)'}]" data-default="'raw'" />
   <meta name="x-icue-property" content="normMin" data-label="'Valeur min (normalisation)'" data-type="slider" data-default="0" data-min="0" data-max="200" data-step="1" />
   <meta name="x-icue-property" content="normMax" data-label="'Valeur max (normalisation)'" data-type="slider" data-default="100" data-min="1" data-max="200" data-step="1" />
+  <meta name="x-icue-property" content="yMin" data-label="'Borne min de l axe des valeurs'" data-type="slider" data-default="0" data-min="-100" data-max="200" data-step="1" />
+  <meta name="x-icue-property" content="yMax" data-label="'Borne max de l axe des valeurs'" data-type="slider" data-default="100" data-min="-100" data-max="200" data-step="1" />
+  <meta name="x-icue-property" content="axisUnit" data-label="'Unite des valeurs'" data-type="textfield" data-default="'%'" />
+  <meta name="x-icue-property" content="timeUnit" data-label="'Unite de l axe du temps'" data-type="combobox" data-values="[{'key':'min','value':'Minutes'},{'key':'s','value':'Secondes'}]" data-default="'min'" />
 
   <!-- === Affichage === -->
   <meta name="x-icue-property" content="showHeader" data-label="'Afficher capteur et valeur'" data-type="switch" data-default="true" />
   <meta name="x-icue-property" content="textColor" data-label="'Couleur du texte'" data-type="color" data-default="'#ffffff'" />
+  <meta name="x-icue-property" content="scaleColor" data-label="'Couleur des echelles'" data-type="color" data-default="'#9aa4ad'" />
 
   <!-- === Personnalisation (doit etre le dernier groupe) === -->
   <meta name="x-icue-property" content="backgroundColor" data-label="'Arriere-plan'" data-type="color" data-default="'#0d1117'" />
@@ -29,7 +34,8 @@
   <script id="x-icue-groups" type="application/json">
     [
       { "title": "'Monitoring'", "properties": ["sensorId", "customName", "historyMinutes", "curveColor"] },
-      { "title": "'Echelle'", "properties": ["valueMode", "normMin", "normMax"] },
+      { "title": "'Echelle et bornes'", "properties": ["valueMode", "normMin", "normMax", "yMin", "yMax", "axisUnit"] },
+      { "title": "'Axes'", "properties": ["timeUnit", "scaleColor"] },
       { "title": "'Affichage'", "properties": ["showHeader", "textColor"] },
       { "title": "'Personnalisation'", "properties": ["backgroundColor", "transparency"] }
     ]
