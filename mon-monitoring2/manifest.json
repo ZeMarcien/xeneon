@@ -1,0 +1,26 @@
+{
+    "author": "Mon Monitoring 2",
+    "id": "com.local.monmonitoring2",
+    "name": "Mon Monitoring 2",
+    "description": "Courbe d'un capteur (echelle 0-100), historique reglable de 1 a 5 minutes, couleurs et bornes affichees configurables",
+    "version": "1.2.0",
+    "preview_icon": "resources/icon.svg",
+    "min_framework_version": "1.0.0",
+    "os": [
+        {
+            "platform": "windows"
+        }
+    ],
+    "supported_devices": [
+        {
+            "type": "dashboard_lcd",
+            "features": [
+                "sensor-screen"
+            ]
+        }
+    ],
+    "interactive": true,
+    "required_plugins": [
+        "widgetbuilder.sensorsdataprovider:Sensors:1.0"
+    ]
+}

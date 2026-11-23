@@ -1,0 +1,87 @@
+/* Mon Monitoring 2 — styles
+   Ligne du haut = 10 % de la hauteur du widget ; nom a gauche, valeur a droite,
+   tous les caracteres a la meme taille. */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.widget-root {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Ligne du haut : hauteur fixe 10 % du widget */
+.header {
+  flex: 0 0 10%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(10vh * 0.2);
+  min-height: 0;
+}
+
+/* Tous les caracteres de la ligne du haut a la meme taille */
+.sensor-name,
+.current-value,
+.current-value .units {
+  font-size: calc(10vh * 0.55);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.sensor-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.current-value {
+  white-space: nowrap;
+}
+
+.current-value .units {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.chart-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  /* le decalage en dessous de la ligne du haut (12 px) est calcule dans le JS
+     pour rester exact quelle que soit la taille du widget */
+  margin-top: 0;
+}
+
+#chart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10vh * 0.4);
+  opacity: 0.6;
+}
+
+.empty-state.hidden {
+  display: none;
+}
